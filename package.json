@@ -1,0 +1,9 @@
+{
+  "name": "nextgengigs-automation",
+  "version": "1.0.0",
+  "description": "Automated job scraper",
+  "main": "scraper.js",
+  "dependencies": {
+    "rss-parser": "^3.13.0"
+  }
+}
