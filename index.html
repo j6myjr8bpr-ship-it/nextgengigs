@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextGenGigs | Lavori Remoti in AI & Sviluppo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans" x-data="jobBoard()">
+    <nav class="bg-indigo-600 text-white p-4 shadow-md">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold tracking-tight">NextGen<span class="text-indigo-200">Gigs</span></h1>
+        </div>
+    </nav>
+    <header class="max-w-5xl mx-auto py-12 px-4 text-center">
+        <h2 class="text-4xl font-extrabold text-gray-900 mb-4">Lavora da dove vuoi. Costruisci il futuro.</h2>
+        <p class="text-lg text-gray-600 mb-8">Aggreghiamo i migliori lavori 100% da remoto in AI e Sviluppo Software. Aggiornato automaticamente.</p>
+    </header>
+    <main class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 pb-12">
+        <section class="md:col-span-2">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Ultimi Annunci</h3>
+                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">Live</span>
+            </div>
+            <div x-show="loading" class="text-center py-10">
+                <p class="text-gray-500">Ricerca nuovi lavori in corso...</p>
+            </div>
+            <div class="space-y-4" x-show="!loading">
+                <template x-for="job in jobs" :key="job.id">
+                    <a :href="job.link" target="_blank" rel="noopener nofollow" class="block bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition">
+                        <h4 class="text-lg font-bold text-indigo-600" x-text="job.title"></h4>
+                        <p class="text-sm text-gray-500 mt-1" x-text="job.company"></p>
+                    </a>
+                </template>
+                <div x-show="jobs.length === 0" class="text-center py-10 text-gray-500">
+                    Nessun lavoro trovato. Torna più tardi!
+                </div>
+            </div>
+        </section>
+        <aside class="space-y-6">
+            <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-md p-6 text-white text-center">
+                <h4 class="font-bold text-xl mb-2">Diventa un Esperto AI</h4>
+                <p class="text-sm mb-4">Le aziende pagano fino a $150k/anno per sviluppatori AI.</p>
+                <a href="#" class="block bg-white text-indigo-600 font-bold py-2 px-4 rounded">Vedi i Corsi su Coursera</a>
+            </div>
+        </aside>
+    </main>
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('jobBoard', () => ({
+                jobs: [],
+                loading: true,
+                init() {
+                    fetch('./data/jobs.json')
+                        .then(res => res.json())
+                        .then(data => { this.jobs = data; this.loading = false; })
+                        .catch(() => { this.loading = false; });
+                }
+            }))
+        })
+    </script>
+</body>
+</html>
